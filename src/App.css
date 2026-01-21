@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.launches-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 20px;
+  row-gap: 20px;
+  margin-top: 40px;
+}

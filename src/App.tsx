@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Container, Title } from '@mantine/core';
+import { useReducer, useEffect } from 'react';
+import { reducer } from './reducer';
+import type { State } from './types';
+import { LaunchCard } from './components/launchCard/LaunchCard';
+import { Modal } from './components/modal/Modal';
+import { fetchLaunches } from './api/launchesApi';
+
+import './App.css';
+
+const initialState: State = {
+  launches: [],
+  loading: false,
+  error: null,
+  isModalOpen: false,
+  selectedLaunch: null,
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    dispatch({ type: 'FETCH_START' });
+
+    fetchLaunches()
+      .then((data) => {
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
+      })
+      .catch((error) => {
+        dispatch({ type: 'FETCH_ERROR', payload: error.message });
+      });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Container size="lg">
+      <Title ta="center" mt="lg">
+        SpaceX Launches 2020
+      </Title>
+
+      <div className="launches-grid">
+        {state.launches.map((launch) => (
+          <LaunchCard
+            key={launch.mission_name}
+            launch={launch}
+            openModal={(launch) =>
+              dispatch({ type: 'OPEN_MODAL', payload: launch })
+            }
+          />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+
+      <Modal
+        isOpen={state.isModalOpen}
+        launch={state.selectedLaunch}
+        onClose={() => dispatch({ type: 'CLOSE_MODAL' })}
+      />
+    </Container>
+  );
 }
 
-export default App
+export default App;

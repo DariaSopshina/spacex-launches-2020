@@ -1,4 +1,4 @@
-import { Container, Title } from '@mantine/core';
+import { Container, Title, Skeleton, Card } from '@mantine/core';
 import { useReducer, useEffect } from 'react';
 import { reducer } from './reducer';
 import type { State } from './types';
@@ -38,15 +38,24 @@ function App() {
       </Title>
 
       <div className="launches-grid">
-        {state.launches.map((launch) => (
-          <LaunchCard
-            key={launch.mission_name}
-            launch={launch}
-            openModal={(launch) =>
-              dispatch({ type: 'OPEN_MODAL', payload: launch })
-            }
-          />
-        ))}
+        {state.loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <Card key={index} shadow="sm" padding="md" radius="md" withBorder>
+                <Skeleton height={160} mb="sm" />
+                <Skeleton height={18} width="80%" mb="xs" />
+                <Skeleton height={14} width="60%" mb="md" />
+                <Skeleton height={36} />
+              </Card>
+            ))
+          : state.launches.map((launch) => (
+              <LaunchCard
+                key={launch.mission_name}
+                launch={launch}
+                openModal={(launch) =>
+                  dispatch({ type: 'OPEN_MODAL', payload: launch })
+                }
+              />
+            ))}
       </div>
 
       <Modal

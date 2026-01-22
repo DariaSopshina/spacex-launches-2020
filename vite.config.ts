@@ -4,4 +4,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/spacex-launches-2020/',
+  build: {
+    outDir: 'docs',
+    emptyOutDir: true,
+  },
 });

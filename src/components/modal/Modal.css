@@ -49,3 +49,16 @@
   font-size: 14px;
   margin-bottom: 4px;
 }
+
+.modal-image-error {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  margin: 0 auto 24px;
+  justify-content: center;
+  align-items: center;
+  color: #6b7280;
+  background-color: #f1f3f5;
+  text-align: center;
+  border-radius: 8px;
+}

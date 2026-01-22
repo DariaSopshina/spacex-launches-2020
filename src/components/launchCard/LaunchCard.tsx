@@ -1,4 +1,5 @@
 import { Card, Image, Text, Button } from '@mantine/core';
+import { useState } from 'react';
 import type { Launch } from '../../types';
 
 import './LaunchCard.css';
@@ -9,15 +10,26 @@ type Props = {
 };
 
 export function LaunchCard({ launch, openModal }: Props) {
+  const [imageError, setImageError] = useState(false);
+
+  const imageSrc = launch.links?.mission_patch_small;
+
+  const showFallback = !imageSrc || imageError;
+
   return (
     <Card shadow="sm" padding="md" radius="md" withBorder>
       <Card.Section className="launch-card__image-wrapper">
-        <Image
-          src={launch.links?.mission_patch_small || undefined}
-          alt={launch.mission_name}
-          height={160}
-          fit="contain"
-        />
+        {showFallback ? (
+          <div className="launch-card__image-error">Изображение недоступно</div>
+        ) : (
+          <Image
+            src={imageSrc}
+            alt={launch.mission_name}
+            height={160}
+            fit="contain"
+            onError={() => setImageError(true)}
+          />
+        )}
       </Card.Section>
 
       <Text fw={500} mt="sm" className="launch-card__title">

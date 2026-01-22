@@ -1,20 +1,12 @@
 import { Container, Title, Skeleton, Card } from '@mantine/core';
 import { useReducer, useEffect } from 'react';
-import { reducer } from './reducer';
-import type { State } from './types';
+import { reducer } from './store/launches/reducer';
+import { initialState } from './store/launches/initialState';
 import { LaunchCard } from './components/launchCard/LaunchCard';
 import { Modal } from './components/modal/Modal';
 import { fetchLaunches } from './api/launchesApi';
 
 import './App.css';
-
-const initialState: State = {
-  launches: [],
-  loading: false,
-  error: null,
-  isModalOpen: false,
-  selectedLaunch: null,
-};
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);

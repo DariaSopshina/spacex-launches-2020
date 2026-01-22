@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { reducer } from './reducer';
-import type { State, Launch } from './types';
+import type { State, Launch } from '../../types';
 
 const initialState: State = {
   launches: [],
